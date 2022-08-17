@@ -1,4 +1,4 @@
-module github.com/QIN2DIM/istockphoto/v2
+module github.com/QIN2DIM/istockphoto-go
 
 go 1.19
 
