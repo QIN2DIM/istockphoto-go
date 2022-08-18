@@ -46,13 +46,13 @@ type Downloader struct {
 	// Flag is the name of the parent directory where images are stored,
 	// and its default value is the keyword you specify, namely Phrase
 	Flag     string
-	Power    int
 	Similar  string
 	ProxyURL string
 
 	dirLocal string
 	holdAPI  string
 	query    string
+	power    int
 
 	collector *colly.Collector
 	worker    *queue.Queue
@@ -82,7 +82,7 @@ func (d *Downloader) init() {
 	d.Flag = d.phrase
 	d.Pages = MinPages
 	d.Backend = DefaultBackend
-	d.Power = runtime.NumCPU()
+	d.power = runtime.NumCPU()
 	d.holdAPI = IstockSearchAPI
 	d.Similar = Content
 	d.ProxyURL = GetProxies()["http"]
@@ -121,7 +121,7 @@ func (d *Downloader) preload() {
 	d.initMemory()
 
 	log.Printf("Container preload - phrase=`%s`", d.phrase)
-	log.Printf("Setup [istock] - power=%d pages=%d", d.Power, d.Pages)
+	log.Printf("Setup [istock] - power=%d pages=%d", d.power, d.Pages)
 }
 
 func (d *Downloader) checkParams() {
@@ -189,14 +189,14 @@ func (d *Downloader) initWorker() {
 	}
 
 	// [2] Reset threads of the worker
-	if d.Power > MaxPower || d.Power < MinPower {
+	if d.power > MaxPower || d.power < MinPower {
 		log.Printf("Automatically calibrate to default values. - power∈[%d, %d]\n", MinPower, MaxPower)
-		d.Power = MinPower
+		d.power = MinPower
 	}
-	if d.Power >= d.Pages {
-		d.Power = d.Pages
+	if d.power >= d.Pages {
+		d.power = d.Pages
 	}
-	d.worker.Threads = d.Power
+	d.worker.Threads = d.power
 
 	// [3] Refactor Colly Headers
 	extensions.Referer(d.collector)

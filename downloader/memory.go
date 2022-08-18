@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	//MemoryYaml is filename of the memory digest file
-	MemoryYaml = "_memory.yaml"
-	// MemoryPlaceholder is the value placeholder in the `_memory.yaml` file
-	MemoryPlaceholder = "_"
-	// MemorySuffix cached image format
-	MemorySuffix = ".jpg"
+	//memoryYaml is filename of the memory digest file
+	memoryYaml = "_memory.yaml"
+	// memoryPlaceholder is the value placeholder in the `_memory.yaml` file
+	memoryPlaceholder = "_"
+	// memorySuffix cached image format
+	memorySuffix = ".jpg"
 )
 
 type memory struct {
@@ -30,7 +30,7 @@ type memory struct {
 
 func newMemory(dirMemory string) *memory {
 	m := &memory{
-		PathMemory: filepath.Join(dirMemory, MemoryYaml),
+		PathMemory: filepath.Join(dirMemory, memoryYaml),
 	}
 	m.init()
 	return m
@@ -48,8 +48,8 @@ func parseIstockID(s string) string {
 }
 
 func (m *memory) init() {
-	m.Placeholder = MemoryPlaceholder
-	m.ext = MemorySuffix
+	m.Placeholder = memoryPlaceholder
+	m.ext = memorySuffix
 	m.container = make(map[string]string)
 	if err := os.MkdirAll(filepath.Dir(m.PathMemory), os.ModePerm); err != nil {
 		log.Println("Failed to create memory path: ", err)
