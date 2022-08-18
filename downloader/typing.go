@@ -1,4 +1,4 @@
-package istockphoto
+package downloader
 
 const (
 	MediaType     = "MediaType"

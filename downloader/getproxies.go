@@ -1,4 +1,4 @@
-package istockphoto
+package downloader
 
 import (
 	"fmt"
