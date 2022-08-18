@@ -28,16 +28,27 @@ const (
 )
 
 type Downloader struct {
-	Phrase         string
-	Pages          int
-	Mediatype      string
+	// phrase is the image tag keyword to be retrieved
+	phrase string
+	// Pages is the size of the data that needs to be collected
+	// For demonstration purposes, don't let Pages exceed MinPages and MaxPages
+	// During initialization, invalid Pages values will be automatically corrected
+	Pages int
+	// MediaType defaults to Photo, options can be viewed in typing
+	Mediatype string
+	// NumberOfPeople defaults to NoPeople, options can be viewed in typing
 	NumberOfPeople string
-	Orientations   string
-	Backend        string
-	Flag           string
-	Power          int
-	Similar        string
-	ProxyURL       string
+	// Orientations defaults to Square, options can be viewed in typing
+	Orientations string
+	// Backend is the root directory of the image cache
+	// the default value is DefaultBackend
+	Backend string
+	// Flag is the name of the parent directory where images are stored,
+	// and its default value is the keyword you specify, namely Phrase
+	Flag     string
+	Power    int
+	Similar  string
+	ProxyURL string
 
 	dirLocal string
 	holdAPI  string
@@ -59,7 +70,7 @@ func NewDownloader(phrase string) *Downloader {
 		log.Fatalln("Invalid phrase")
 	}
 
-	d := &Downloader{Phrase: phrase}
+	d := &Downloader{phrase: phrase}
 	d.init()
 	return d
 }
@@ -68,7 +79,7 @@ func (d *Downloader) init() {
 	d.Mediatype = queryDefault[nameMediaType]
 	d.NumberOfPeople = queryDefault[nameNumberOfPeople]
 	d.Orientations = queryDefault[nameOrientations]
-	d.Flag = d.Phrase
+	d.Flag = d.phrase
 	d.Pages = MinPages
 	d.Backend = DefaultBackend
 	d.Power = runtime.NumCPU()
@@ -109,7 +120,7 @@ func (d *Downloader) preload() {
 	d.initWorker()
 	d.initMemory()
 
-	log.Printf("Container preload - phrase=`%s`", d.Phrase)
+	log.Printf("Container preload - phrase=`%s`", d.phrase)
 	log.Printf("Setup [istock] - power=%d pages=%d", d.Power, d.Pages)
 }
 
@@ -147,9 +158,9 @@ func (d *Downloader) checkQuery() {
 	var params string
 	parser, _ := url.Parse(d.holdAPI)
 	if parser.Path == "/search/2/image" && strings.HasPrefix(parser.RawQuery, ColorSimilarityAssetid) {
-		params = fmt.Sprintf("%s&phrase=%s", d.holdAPI, d.Phrase)
+		params = fmt.Sprintf("%s&phrase=%s", d.holdAPI, d.phrase)
 	} else {
-		params = fmt.Sprintf("%s?phrase=%s", d.holdAPI, d.Phrase)
+		params = fmt.Sprintf("%s?phrase=%s", d.holdAPI, d.phrase)
 	}
 
 	if d.Mediatype != UNDEFINED {

@@ -1,7 +1,6 @@
 package downloader
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"net/url"
 	"os"
@@ -25,8 +24,8 @@ type memory struct {
 	PathMemory string
 	// ext cached image format
 	ext string
-	// Viper object holds the data container for the `download progress object`
-	Viper *viper.Viper
+	// container is cached images information
+	container map[string]string
 }
 
 func newMemory(dirMemory string) *memory {
@@ -51,13 +50,11 @@ func parseIstockID(s string) string {
 func (m *memory) init() {
 	m.Placeholder = MemoryPlaceholder
 	m.ext = MemorySuffix
-
+	m.container = make(map[string]string)
 	if err := os.MkdirAll(filepath.Dir(m.PathMemory), os.ModePerm); err != nil {
 		log.Println("Failed to create memory path: ", err)
 		return
 	}
-	m.Viper = viper.New()
-	m.Viper.SetConfigFile(m.PathMemory)
 	m.loadMemory()
 }
 
@@ -75,9 +72,9 @@ func (m *memory) loadMemory() {
 
 // GetMemory query memory
 func (m *memory) GetMemory(k string) string {
-	return m.Viper.GetString(parseIstockID(k))
+	return m.container[parseIstockID(k)]
 }
 
 func (m *memory) setMemory(k string) {
-	m.Viper.Set(parseIstockID(k), m.Placeholder)
+	m.container[parseIstockID(k)] = m.Placeholder
 }
