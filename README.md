@@ -1,6 +1,13 @@
 # IstockPhoto Go
 
-📸 Gracefully download dataset from [istockphoto](https://www.istockphoto.com/).
+<img align="right" width="200px" src="https://user-images.githubusercontent.com/62018067/168443374-8343a72a-dc70-41b3-85ed-4776b3595bd3.png">
+
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
+
+📸 Gracefully download dataset from [istockphoto](https://www.istockphoto.com/). 
+
+- You can download nearly a thousand images in a few tens of seconds with great efficiency thanks to a modern crawler infrastructure.
+- You can customize keywords and fine-tune filters for the purpose of controlling the search scope of resources.
 
 ## Installation
 
