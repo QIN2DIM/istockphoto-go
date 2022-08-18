@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/url"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -61,14 +60,14 @@ func NewDownloader(phrase string) *Downloader {
 	}
 
 	d := &Downloader{Phrase: phrase}
-	d.Init()
+	d.init()
 	return d
 }
 
-func (d *Downloader) Init() {
-	d.Mediatype = queryDefault[MediaType]
-	d.NumberOfPeople = queryDefault[NumberOfPeople]
-	d.Orientations = queryDefault[Orientations]
+func (d *Downloader) init() {
+	d.Mediatype = queryDefault[nameMediaType]
+	d.NumberOfPeople = queryDefault[nameNumberOfPeople]
+	d.Orientations = queryDefault[nameOrientations]
 	d.Flag = d.Phrase
 	d.Pages = MinPages
 	d.Backend = DefaultBackend
@@ -101,7 +100,6 @@ func (d *Downloader) Mining() {
 		log.Fatalln("Failed to setup worker, ", err)
 	}
 	log.Println("Task complete.")
-	d.offload()
 }
 
 func (d *Downloader) preload() {
@@ -121,9 +119,9 @@ func (d *Downloader) checkParams() {
 		d.Pages = MinPages
 	}
 
-	d.Mediatype = RefactorInvalidQueryType(MediaType, d.Mediatype)
-	d.Orientations = RefactorInvalidQueryType(Orientations, d.Orientations)
-	d.NumberOfPeople = RefactorInvalidQueryType(NumberOfPeople, d.NumberOfPeople)
+	d.Mediatype = RefactorInvalidQueryType(nameMediaType, d.Mediatype)
+	d.Orientations = RefactorInvalidQueryType(nameOrientations, d.Orientations)
+	d.NumberOfPeople = RefactorInvalidQueryType(nameNumberOfPeople, d.NumberOfPeople)
 }
 
 func (d *Downloader) checkWorkspace() {
@@ -134,9 +132,9 @@ func (d *Downloader) checkWorkspace() {
 	}
 
 	if d.Backend == DefaultBackend {
-		d.dirLocal = path.Join(d.Backend, d.Flag)
+		d.dirLocal = filepath.Join(d.Backend, d.Flag)
 	} else {
-		d.dirLocal = path.Join(d.Backend, DefaultBackend, d.Flag)
+		d.dirLocal = filepath.Join(d.Backend, DefaultBackend, d.Flag)
 	}
 
 	err := os.MkdirAll(d.dirLocal, os.ModePerm)
@@ -168,7 +166,7 @@ func (d *Downloader) checkQuery() {
 }
 
 func (d *Downloader) initWorker() {
-	// [1] Init concurrent-tasks
+	// [1] init concurrent-tasks
 	for i := 1; i < d.Pages+1; i++ {
 		URL := fmt.Sprintf("%s&page=%d", d.query, i)
 		err := d.worker.AddURL(URL)
@@ -204,7 +202,7 @@ func (d *Downloader) initWorker() {
 }
 
 func (d *Downloader) initMemory() {
-	d.memory = NewMemory(d.dirLocal)
+	d.memory = newMemory(d.dirLocal)
 }
 
 func (d *Downloader) overload() {
@@ -231,17 +229,11 @@ func (d *Downloader) overload() {
 		if progress, _ := d.worker.Size(); progress != 0 {
 			log.Printf("Offload - taskID=%s progess=%d", r.FileName(), progress)
 		}
-		if filepath.Ext(r.FileName()) == ".jpg" {
-			fn := path.Join(d.dirLocal, r.FileName())
+		if filepath.Ext(r.FileName()) == d.memory.ext {
+			fn := filepath.Join(d.dirLocal, r.FileName())
 			if err := r.Save(fn); err != nil {
 				log.Printf("Failed to offload - URL=%s", r.Request.URL.String())
-			} else {
-				d.memory.SetMemory(r.FileName())
 			}
 		}
 	})
-}
-
-func (d *Downloader) offload() {
-	d.memory.DumpMemory()
 }

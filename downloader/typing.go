@@ -1,51 +1,95 @@
 package downloader
 
 const (
-	MediaType     = "MediaType"
-	PHOTO         = "photography"
-	ILLUSTRATIONS = "illustration"
-	VECTORS       = "illustration&assetfiletype=eps"
+	nameMediaType      = "MediaType"
+	nameOrientations   = "Orientations"
+	nameNumberOfPeople = "NumberOfPeople"
 
-	Orientations        = "Orientations"
-	SQUARE              = "square"
-	VERTICAL            = "vertical"
-	HORIZONTAL          = "horizontal"
+	Photo         = "photography"
+	Illustrations = "illustration"
+	Vectors       = "illustration&assetfiletype=eps"
+
+	Square              = "square"
+	Vertical            = "vertical"
+	Horizontal          = "horizontal"
 	PanoramicVertical   = "panoramicvertical"
 	PanoramicHorizontal = "panoramichorizontal"
 
-	NumberOfPeople = "NumberOfPeople"
-	NoPeople       = "none"
-	OnePerson      = "one"
-	TwoPeople      = "two"
-	GroupOfPeople  = "group"
+	NoPeople      = "none"
+	OnePerson     = "one"
+	TwoPeople     = "two"
+	GroupOfPeople = "group"
 
 	UNDEFINED = "undefined"
 )
 
+type filterMediaType struct {
+	Photo         string
+	Illustrations string
+	Vectors       string
+	Undefined     string
+	optional      []string
+}
+
+type filterOrientations struct {
+	Square              string
+	Vertical            string
+	Horizontal          string
+	PanoramicVertical   string
+	PanoramicHorizontal string
+	Undefined           string
+	optional            []string
+}
+
+type filterNumberOfPeople struct {
+	NoPeople      string
+	OnePerson     string
+	TwoPeople     string
+	GroupOfPeople string
+	Undefined     string
+	optional      []string
+}
+
 var (
-	OptionalMediaType    = []string{PHOTO, ILLUSTRATIONS, VECTORS}
-	OptionalOrientations = []string{SQUARE, VERTICAL, HORIZONTAL, PanoramicVertical, PanoramicHorizontal}
-	OptionalNoPeople     = []string{NoPeople, OnePerson, TwoPeople, GroupOfPeople}
-
-	queryMap = map[string][]string{
-		MediaType:      OptionalMediaType,
-		Orientations:   OptionalOrientations,
-		NumberOfPeople: OptionalNoPeople,
+	MediaType = &filterMediaType{
+		Photo:         Photo,
+		Illustrations: Illustrations,
+		Vectors:       Vectors,
+		Undefined:     UNDEFINED,
+		optional:      []string{Photo, Illustrations, Vectors, UNDEFINED},
 	}
-
-	queryDefault = map[string]string{
-		MediaType:      PHOTO,
-		Orientations:   SQUARE,
-		NumberOfPeople: NoPeople,
+	Orientations = &filterOrientations{
+		Square:              Square,
+		Vertical:            Vertical,
+		Horizontal:          Horizontal,
+		PanoramicVertical:   PanoramicVertical,
+		PanoramicHorizontal: PanoramicHorizontal,
+		Undefined:           UNDEFINED,
+		optional:            []string{Square, Vertical, Horizontal, PanoramicVertical, PanoramicHorizontal, UNDEFINED},
+	}
+	NumberOfPeople = &filterNumberOfPeople{
+		NoPeople:      NoPeople,
+		OnePerson:     OnePerson,
+		TwoPeople:     TwoPeople,
+		GroupOfPeople: GroupOfPeople,
+		Undefined:     UNDEFINED,
+		optional:      []string{NoPeople, OnePerson, TwoPeople, GroupOfPeople, UNDEFINED},
 	}
 )
 
-// Query 控制检索接口的参数量
-type Query struct {
-	MediaType      string
-	Orientations   string
-	NumberOfPeople string
-}
+var (
+	queryMap = map[string][]string{
+		nameMediaType:      MediaType.optional,
+		nameOrientations:   Orientations.optional,
+		nameNumberOfPeople: NumberOfPeople.optional,
+	}
+
+	queryDefault = map[string]string{
+		nameMediaType:      MediaType.Photo,
+		nameOrientations:   Orientations.Square,
+		nameNumberOfPeople: NumberOfPeople.NoPeople,
+	}
+)
 
 // RefactorInvalidQueryType 参数检查时自动将偏离的参数修正回默认值
 func RefactorInvalidQueryType(queryType, query string) string {
