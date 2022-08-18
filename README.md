@@ -1,5 +1,3 @@
-![image-20220818084304218](https://user-images.githubusercontent.com/62018067/185268084-23e4db6a-7162-4297-ba41-bb401a1e9ec6.png)
-
 # IstockPhoto Go
 
 📸 Gracefully download dataset from [istockphoto](https://www.istockphoto.com/).
@@ -26,3 +24,4 @@ func main() {
 }
 ```
 
+![image-20220818084304218](https://user-images.githubusercontent.com/62018067/185268084-23e4db6a-7162-4297-ba41-bb401a1e9ec6.png)
