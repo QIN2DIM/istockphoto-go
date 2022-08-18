@@ -17,6 +17,8 @@ const (
 	memorySuffix = ".jpg"
 )
 
+// memory is a simple process controller that
+// can be used to prevent the download of duplicate images
 type memory struct {
 	// Placeholder is the value placeholder in the `_memory.yaml` file
 	Placeholder string
@@ -28,6 +30,8 @@ type memory struct {
 	container map[string]string
 }
 
+// newMemory Need to pass in dirMemory to initialize the memory object
+// dirMemory is the cache directory for images
 func newMemory(dirMemory string) *memory {
 	m := &memory{
 		PathMemory: filepath.Join(dirMemory, memoryYaml),
@@ -36,17 +40,20 @@ func newMemory(dirMemory string) *memory {
 	return m
 }
 
-func parseIstockID(s string) string {
+// parseIstockID clean out IstockID in normalized string
+// IstockID is the unique identifier of the image
+func (m *memory) parseIstockID(s string) string {
 	if strings.HasPrefix(s, "https://") {
 		urlParse, _ := url.Parse(s)
 		return urlParse.Query()["m"][0]
-	} else if filepath.Ext(s) == ".jpg" {
+	} else if filepath.Ext(s) == m.ext {
 		return strings.Split(s, "_")[1]
 	} else {
 		return s
 	}
 }
 
+// init initializes the memory object and assigns default values
 func (m *memory) init() {
 	m.Placeholder = memoryPlaceholder
 	m.ext = memorySuffix
@@ -72,9 +79,11 @@ func (m *memory) loadMemory() {
 
 // GetMemory query memory
 func (m *memory) GetMemory(k string) string {
-	return m.container[parseIstockID(k)]
+	return m.container[m.parseIstockID(k)]
 }
 
+// setMemory Read the filename of an existing file into the cache
+// They will be stored in the container map
 func (m *memory) setMemory(k string) {
-	m.container[parseIstockID(k)] = m.Placeholder
+	m.container[m.parseIstockID(k)] = m.Placeholder
 }

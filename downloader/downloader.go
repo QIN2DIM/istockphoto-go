@@ -2,6 +2,7 @@ package downloader
 
 import (
 	"fmt"
+	"github.com/QIN2DIM/getproxies"
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
 	"github.com/gocolly/colly/v2/queue"
@@ -20,7 +21,7 @@ const (
 	MaxPages       = 20
 	MinPages       = 1
 	DefaultBackend = "istock_dataset"
-	MaxPower       = 64
+	MaxPower       = 32
 	MinPower       = 1
 
 	Content = "content"
@@ -85,7 +86,7 @@ func (d *Downloader) init() {
 	d.power = runtime.NumCPU()
 	d.holdAPI = IstockSearchAPI
 	d.Similar = Content
-	d.ProxyURL = GetProxies()["http"]
+	d.ProxyURL = getproxies.GetProxies()["http"]
 
 	d.collector = colly.NewCollector()
 	d.worker, _ = queue.New(1, nil)
@@ -180,6 +181,7 @@ func (d *Downloader) initWorker() {
 	// [1] init concurrent-tasks
 	for i := 1; i < d.Pages+1; i++ {
 		URL := fmt.Sprintf("%s&page=%d", d.query, i)
+		URL = strings.ReplaceAll(URL, " ", "%20")
 		err := d.worker.AddURL(URL)
 		if err != nil {
 			log.Fatalln("DownloaderPreloadException: ", err)
@@ -189,12 +191,9 @@ func (d *Downloader) initWorker() {
 	}
 
 	// [2] Reset threads of the worker
-	if d.power > MaxPower || d.power < MinPower {
+	if d.power > MaxPower || d.power < MinPower || d.power >= d.Pages {
 		log.Printf("Automatically calibrate to default values. - power∈[%d, %d]\n", MinPower, MaxPower)
-		d.power = MinPower
-	}
-	if d.power >= d.Pages {
-		d.power = d.Pages
+		d.power = MaxPower
 	}
 	d.worker.Threads = d.power
 
@@ -238,7 +237,7 @@ func (d *Downloader) overload() {
 
 	d.collector.OnScraped(func(r *colly.Response) {
 		if progress, _ := d.worker.Size(); progress != 0 {
-			log.Printf("Offload - taskID=%s progess=%d", r.FileName(), progress)
+			log.Printf("Offload - progess=%d taskID=%s", progress, r.FileName())
 		}
 		if filepath.Ext(r.FileName()) == d.memory.ext {
 			fn := filepath.Join(d.dirLocal, r.FileName())
@@ -247,4 +246,10 @@ func (d *Downloader) overload() {
 			}
 		}
 	})
+}
+
+func (d *Downloader) CloseFilter() {
+	d.Mediatype = MediaType.Undefined
+	d.NumberOfPeople = NumberOfPeople.Undefined
+	d.Orientations = Orientations.Undefined
 }

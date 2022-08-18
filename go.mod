@@ -2,13 +2,11 @@ module github.com/QIN2DIM/istockphoto-go
 
 go 1.19
 
-require (
-	github.com/gocolly/colly/v2 v2.1.0
-	golang.org/x/sys v0.0.0-20220817070843-5a390386f1f2
-)
+require github.com/gocolly/colly/v2 v2.1.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
+	github.com/QIN2DIM/getproxies v0.0.0-20220818032743-5b1162ab97fc // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/antchfx/htmlquery v1.2.3 // indirect
 	github.com/antchfx/xmlquery v1.2.4 // indirect
@@ -22,6 +20,7 @@ require (
 	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
+	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
