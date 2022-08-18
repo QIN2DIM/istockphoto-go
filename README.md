@@ -24,10 +24,10 @@ See [wiki](https://github.com/QIN2DIM/istockphoto-go/wiki) for more detailed exa
 ```go
 package main
 
-import "github.com/QIN2DIM/istockphoto-go"
+import "github.com/QIN2DIM/istockphoto-go/downloader"
 
 func main() {
-	istockphoto.NewDownloader("cyberpunk").Mining()
+	downloader.NewDownloader("cyberpunk").Mining()
 }
 ```
 
