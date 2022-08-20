@@ -1,13 +1,17 @@
-# IstockPhoto Go
+<div align="center">
+    <p align="center"><img src="https://user-images.githubusercontent.com/62018067/168443374-8343a72a-dc70-41b3-85ed-4776b3595bd3.png" width="30%"></p>
+    <h1>IstockPhoto Go</h1>
+    <p><i>📸 Gracefully download dataset from istockphoto. </i></p>
+    <img src="https://img.shields.io/static/v1?message=awesome&style=for-the-badge&logo=Awesome Lists&label=&logoColor=black&labelColor=c5a2bd&color=4e486a">
+    <img src="https://img.shields.io/github/license/QIN2DIM/istockphoto-go?style=for-the-badge">
+    <a href="https://github.com/QIN2DIM/istockphoto-go/releases"><img src="https://img.shields.io/github/downloads/qin2dim/istockphoto-go/total?style=for-the-badge"></a>
+	<br>
+    <a href="https://github.com/QIN2DIM/istockphoto-go/"><img src="https://img.shields.io/github/stars/QIN2DIM/istockphoto-go?style=social"></a>
+	<a href = "https://t.me/+tJrSQ0_0ujkwZmZh"><img src="https://img.shields.io/static/v1?style=social&logo=telegram&label=chat&message=studio" ></a>
+	<br>
+	<br>
+</div>
 
-<img align="right" width="200px" src="https://user-images.githubusercontent.com/62018067/168443374-8343a72a-dc70-41b3-85ed-4776b3595bd3.png">
-
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
-
-📸 Gracefully download dataset from [istockphoto](https://www.istockphoto.com/). 
-
-- You can download nearly a thousand images in a few tens of seconds with great efficiency thanks to a modern crawler infrastructure.
-- You can customize keywords and fine-tune filters for the purpose of controlling the search scope of resources.
 
 ## Installation
 
