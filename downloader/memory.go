@@ -45,7 +45,7 @@ func newMemory(dirMemory string) *memory {
 func (m *memory) parseIstockID(s string) string {
 	if strings.HasPrefix(s, "https://") {
 		urlParse, _ := url.Parse(s)
-		return urlParse.Query()["m"][0]
+		return strings.Split(urlParse.Path, "/")[2]
 	} else if filepath.Ext(s) == m.ext {
 		return strings.Split(s, "_")[1]
 	} else {

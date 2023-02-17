@@ -8,7 +8,7 @@ import (
 )
 
 func TestStandardDownloader(t *testing.T) {
-	downloader.NewDownloader("cyberpunk").Mining()
+	downloader.NewDownloader("bug").Mining()
 }
 
 func TestDownloaderWithProxyURL(t *testing.T) {
@@ -27,8 +27,9 @@ func TestDownloaderNotQuery(t *testing.T) {
 }
 
 func TestDownloaderWithPages(t *testing.T) {
-	d := downloader.NewDownloader("cat")
-	d.Pages = 4
+	d := downloader.NewDownloader("turtle")
+	d.Pages = 3
+	d.Orientations = downloader.Orientations.Undefined
 	d.Mining()
 }
 
@@ -46,17 +47,17 @@ func TestDownloaderWithFlag(t *testing.T) {
 }
 
 func TestMoreLikeThisContent(t *testing.T) {
-	d := downloader.NewDownloader("gun")
+	d := downloader.NewDownloader("turtle")
 	d.Orientations = downloader.Orientations.Undefined
-	d.Flag = "gun-similar-content"
-	d.MoreLikeThis(529989264).Mining()
+	d.Flag = "turtle-similar-content-1"
+	d.MoreLikeThis(1136464536).Mining()
 }
 
 func TestMoreLikeThisColor(t *testing.T) {
-	tag := "cyberpunk"
+	tag := "turtle"
 	d := downloader.NewDownloader(tag)
 	d.Orientations = downloader.Orientations.Undefined
 	d.Flag = fmt.Sprintf("%s-similar-color", tag)
 	d.Similar = downloader.Color
-	d.MoreLikeThis(1266931346).Mining()
+	d.MoreLikeThis(834997362).Mining()
 }
